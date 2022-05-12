@@ -1,5 +1,4 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { Button, Text, View } from "react-native";
 
 export function HomeComponent({ navigation }:any) {

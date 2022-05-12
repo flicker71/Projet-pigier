@@ -1,9 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GameStyles } from "./game.style";
 import { MaterialCommunityIcons as Icon } from "react-native-vector-icons";
+import { TeamContext } from "../../../context/team.context";
 
 
 const Item = ({ title }:any) => (
@@ -16,10 +17,7 @@ export function GameComponent({ navigation }:any) {
   
   const [text, onChangeText] = useState<string>('');
   
-  const [team, setTeam] = useState<Array<{
-    id: string,
-    name: string}>
-    >([]);
+  const {team, setTeam} = useContext(TeamContext);
 
     
   useEffect(() => console.log('useEffect' , team), [team]);
@@ -46,7 +44,7 @@ export function GameComponent({ navigation }:any) {
     const removeEquipe = (id:string) => {
       for (const element of team) {
         if(element.id === id) {
-          setTeam(team.filter((item) => item.id !== id));
+          setTeam(team.filter((item:any) => item.id !== id));
         }        
       }
     } 
@@ -72,7 +70,6 @@ export function GameComponent({ navigation }:any) {
         />
 
         <Text> Nombre d'équipes : {team.length}</Text>
-        {/* <Text>{team}</Text> */}
         
       <FlatList
         data={team}
