@@ -20,12 +20,6 @@ const Stack = createNativeStackNavigator<AppNavigator>();
 
 export default function App() { 
   
-  const [headerName, setHeaderName] = useState<string>('Header');
-
-  const changerHeaderName = ((title:string) => {
-    setHeaderName( title );
-  })
-  
     return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
