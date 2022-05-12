@@ -1,20 +1,44 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { HomeComponent } from './components/screen/Home/home.component';
+import { GameComponent } from './components/screen/Game/game.component';
+import { QuizComponent } from './components/screen/Quiz/quiz.component';
+import { AnswerComponent } from './components/screen/Answer/answer.component';
+import { QuestionComponent } from './components/screen/Question/question.component';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+export type AppNavigator = {
+  Home : undefined,
+  Game: undefined,
+  Quiz: undefined,
+  Question: undefined,
+  Answer: undefined
+}  
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createNativeStackNavigator<AppNavigator>();
+
+export default function App() { 
+  
+  const [headerName, setHeaderName] = useState<string>('Header');
+
+  const changerHeaderName = ((title:string) => {
+    setHeaderName( title );
+  })
+  
+    return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={HomeComponent} />
+            <Stack.Screen name="Game" component={GameComponent} />
+            <Stack.Screen name="Quiz" component={QuizComponent} />
+            <Stack.Screen name="Question" component={QuestionComponent} />
+            <Stack.Screen name="Answer" component={AnswerComponent} />
+          </Stack.Navigator>
+        </NavigationContainer>
+    );
+  }
+
+
+
+  //Créer un context d'équipe, un context timer
