@@ -34,7 +34,7 @@ export default function App() {
             <Stack.Screen name="Quiz" component={QuizComponent} />
             <Stack.Screen name="Question" component={QuestionComponent} />
             <Stack.Screen name="Answer" component={AnswerComponent} />
-          </Stack.Navigator>
+          </Stack.Navigator> 
         </NavigationContainer>
     );
   }
