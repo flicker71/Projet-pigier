@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Button, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GameStyles } from "./game.style";
 import { MaterialCommunityIcons as Icon } from "react-native-vector-icons";
@@ -22,22 +22,30 @@ export function GameComponent({ navigation }:any) {
     
   useEffect(() => console.log('useEffect' , team), [team]);
 
-  const renderItem = ({ item }:any) => {
-    return (
-      <TouchableOpacity
-        onPress={() => removeEquipe(item.id)}
-        >
-          <Item title={item.name}/>
-          <Icon name="close"></Icon>
-      </TouchableOpacity>
-    );
-  } 
+    const renderItem = ({ item }:any) => {
+      return (
+        <TouchableOpacity
+          onPress={() => removeEquipe(item.id)}
+          >
+            <Item title={item.name}/>
+            <Icon name="close"></Icon>
+        </TouchableOpacity>
+      );
+    } 
 
     const addEquipe = () => {
       if(text !== '') {
-      setTeam([...team, { id: Math.random().toString(), name: text}]);
-      console.log('addEquipe', team);
-      onChangeText("");
+        for (const element of team) {
+          if(element.name === text) {
+            return Alert.alert("Cette équipe existe déjà");
+          }          
+        }
+        setTeam([...team, { id: Math.random().toString(), name: text, score: 0}]);
+        console.log('addEquipe', team);
+        onChangeText("");
+      }
+      else {
+        Alert.alert("Champ vide");
       }
     }
 
@@ -49,6 +57,14 @@ export function GameComponent({ navigation }:any) {
       }
     } 
 
+    const requiredTeam = () => {
+      if(team.length > 1) {
+          navigation.navigate('Quiz')
+      }
+      else {
+        Alert.alert("Ajouter au minimun 2 équipes");
+      }
+    }
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         
@@ -60,14 +76,13 @@ export function GameComponent({ navigation }:any) {
           value={text}
           placeholder="Nom de l'équipe"
         />
-        <Button
-          title="Ajouter"
-          onPress={addEquipe}
-        />
-        <Button
-          title="Terminer"
-          onPress={() => navigation.navigate('Quiz')}
-        />
+        <Pressable onPress={addEquipe}>
+          <Text> Ajouter </Text>
+        </Pressable>
+        
+        <Pressable onPress={() => requiredTeam()}>
+          <Text> Terminer </Text>
+        </Pressable>
 
         <Text> Nombre d'équipes : {team.length}</Text>
         
