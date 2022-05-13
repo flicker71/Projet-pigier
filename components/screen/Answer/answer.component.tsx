@@ -3,27 +3,38 @@ import { Alert, Button, Pressable, Text, View } from "react-native";
 import { TeamContext } from "../../../context/team.context";
 import { AnswerStyles } from "./answer.style";
 import RNPickerSelect from 'react-native-picker-select';
+import { TimerContext } from "../../../context/timer.context";
 
 
 export function AnswerComponent({ route, navigation }:any) {
   
   const {team, setTeam} = useContext(TeamContext);
-
+  
+  const {timer, startTimer, clearIntervl} = useContext(TimerContext);
+  
   const [selectedValue, setSelectedValue] = useState('');
   const [count, setCount] = useState<number>(0);
   
   const loremIpsum = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
   
   const { page } = route.params;
+  
+  const getTime = () => {
+    const minutes = Math.floor(timer / 60)
+    const secondes = Math.floor(timer - minutes * 60)
 
-  const rightAnswer = (nameTeam: string, double?: boolean) => {
+    return `${minutes} : ${secondes}`
+  }
+
+  const rightAnswer = (nameTeam: string, double: boolean) => {
     if(nameTeam !== ''){
+      let doubleCount = count;      
       if(double) {
-        setCount(count * 2);
+        doubleCount = count * 2
       }
-        console.log('RightAnswer', nameTeam, "count", count)
+        // console.log('RightAnswer', nameTeam, "count", count, 'doubleCount', doubleCount)
         setTeam(team.map((t: any) => {
-          if(nameTeam === t.name) t.score += count
+          if(nameTeam === t.name) t.score += doubleCount
           return t
       }))
     navigation.navigate("Quiz");
@@ -34,12 +45,12 @@ export function AnswerComponent({ route, navigation }:any) {
   } 
 
   const moreOne = () => {
-    if(count <= 10 && count >= 0){
+    if(count < 10 && count >= 0){
       setCount(count + 1);
     }
   }
   const lessOne = () => {
-    if(count <= 10 && count >= 0){
+    if(count < 10 && count >= 0){
       setCount(count - 1);
     }
   }
@@ -48,6 +59,7 @@ export function AnswerComponent({ route, navigation }:any) {
     case 'sonnette' :
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Text> {getTime()}</Text>
           <Text> {loremIpsum}</Text>
           <View >
             <View style={AnswerStyles.selectDesign}>
@@ -70,7 +82,7 @@ export function AnswerComponent({ route, navigation }:any) {
             </View>
           </View>
   
-          <Pressable style={AnswerStyles.designCard} onPress={() => rightAnswer(selectedValue)}>
+          <Pressable style={AnswerStyles.designCard} onPress={() => rightAnswer(selectedValue, false)}>
             <Text style={AnswerStyles.textColor}> Bonne réponse</Text>
           </Pressable>
           <Pressable style={AnswerStyles.designCard} onPress={() => navigation.navigate("Quiz")}>
@@ -83,6 +95,7 @@ export function AnswerComponent({ route, navigation }:any) {
     case 'check' : 
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Text> {getTime()}</Text>
         <Text> {loremIpsum}</Text>
         <View >
           <View style={AnswerStyles.selectDesign}>
@@ -105,7 +118,7 @@ export function AnswerComponent({ route, navigation }:any) {
           </View>
         </View>
 
-        <Pressable style={AnswerStyles.designCard} onPress={() => rightAnswer(selectedValue)}>
+        <Pressable style={AnswerStyles.designCard} onPress={() => rightAnswer(selectedValue, false)}>
           <Text style={AnswerStyles.textColor}> Bonne réponse</Text>
         </Pressable>
         <Pressable style={AnswerStyles.designCard} onPress={() => navigation.navigate("Quiz")}>
@@ -118,6 +131,7 @@ export function AnswerComponent({ route, navigation }:any) {
     case 'cookie' :
       return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Text> {getTime()}</Text>
         <Text> {loremIpsum}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent:'center'}}>
           <RNPickerSelect
@@ -139,7 +153,7 @@ export function AnswerComponent({ route, navigation }:any) {
         </View>
 
         <Pressable style={AnswerStyles.designCard} onPress={() => rightAnswer(selectedValue, true)}>
-          <Text style={AnswerStyles.textColor}> Bonne réponse</Text>
+          <Text style={AnswerStyles.textColor}> Bonne réponse Cookie </Text>
         </Pressable>
             <Pressable style={AnswerStyles.designCard} onPress={() => navigation.navigate("Quiz")}>
           <Text style={AnswerStyles.textColor}> Mauvaise réponse</Text>

@@ -1,7 +1,9 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Alert, Button, FlatList, Pressable, Text, View } from "react-native";
 import { TeamContext } from "../../../context/team.context";
+import { TimerContext } from "../../../context/timer.context";
+import ScoreBoardModal from "../../../scoreBoard.modal";
 import { QuizStyles } from "./quiz.style";
 
 const Item = ({ title, score }:any) => (
@@ -11,6 +13,25 @@ const Item = ({ title, score }:any) => (
 );
 
 export function QuizComponent({ navigation }:any) {
+  
+  const {timer, startTimer, clearIntervl} = useContext(TimerContext);
+      
+  useEffect(()=>{
+    startTimer();
+  }, [])
+
+  useEffect(() => {
+    if(timer >= 3000){
+      clearIntervl()
+    }
+  }, [timer])
+
+  const getTime = () => {
+    const minutes = Math.floor(timer / 60)
+    const secondes = Math.floor(timer - minutes * 60)
+
+    return `${minutes} : ${secondes}`
+  }
   
   const renderItem = ({ item }:any) => {
     return (
@@ -28,7 +49,8 @@ export function QuizComponent({ navigation }:any) {
   const {team, setTeam} = useContext(TeamContext);
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        
+        {/* <ScoreBoardModal></ScoreBoardModal> */}
+        <Text> {getTime()}</Text>
       <FlatList
         data={team}
         renderItem={renderItem}
@@ -44,7 +66,7 @@ export function QuizComponent({ navigation }:any) {
           </Pressable>
          </View>
          <View style={QuizStyles.cardColumn}>
-          <Pressable style={QuizStyles.designCard}  onPress={() =>  questionNavigate('cookie')}>
+          <Pressable style={QuizStyles.designCard} onPress={() => questionNavigate('cookie')}>
             <Text style={QuizStyles.textColor}> Cookie granola double pépites</Text>
           </Pressable>
           <Pressable style={QuizStyles.designCard} onPress={() => Alert.alert("L'équipe rejoue !")}>

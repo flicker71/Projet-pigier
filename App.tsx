@@ -7,7 +7,8 @@ import { QuizComponent } from './components/screen/Quiz/quiz.component';
 import { AnswerComponent } from './components/screen/Answer/answer.component';
 import { QuestionComponent } from './components/screen/Question/question.component';
 import { TeamContext } from './context/team.context';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { TimerContext } from './context/timer.context';
 
 export type AppNavigator = {
   Home : undefined,
@@ -20,23 +21,40 @@ export type AppNavigator = {
 const Stack = createNativeStackNavigator<AppNavigator>();
 
 export default function App() { 
+
+  
+  const [timer, setTimer] = useState(0);
+  const [interval, setIntrvl] = useState<any>(null);
+
+  const time = () => {
+    setIntrvl(setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000))}
+
+    const clearIntervl = () => {
+      clearInterval(interval);
+    }
   
   const [team, setTeam] = useState<Array<{
     id: string,
-    name: string}>
+    name: string,
+    score: number,
+  }>
     >([]); 
   
     return (
       // <View>
         <NavigationContainer>
           <TeamContext.Provider value={{team, setTeam}}>
-            <Stack.Navigator initialRouteName="Home">
-              <Stack.Screen name="Home" component={HomeComponent} />
-              <Stack.Screen name="Game" component={GameComponent} />
-              <Stack.Screen name="Quiz" component={QuizComponent} />
-              <Stack.Screen name="Question" component={QuestionComponent} />
-              <Stack.Screen name="Answer" component={AnswerComponent} />
-            </Stack.Navigator> 
+            <TimerContext.Provider value={{timer, setTimer,startTimer: time,clearIntervl}}>
+              <Stack.Navigator initialRouteName="Home">
+                <Stack.Screen name="Home" component={HomeComponent} />
+                <Stack.Screen name="Game" component={GameComponent} />
+                <Stack.Screen name="Quiz" component={QuizComponent} />
+                <Stack.Screen name="Question" component={QuestionComponent} />
+                <Stack.Screen name="Answer" component={AnswerComponent} />
+              </Stack.Navigator> 
+            </TimerContext.Provider>
           </TeamContext.Provider>
         </NavigationContainer>
       // </View>
