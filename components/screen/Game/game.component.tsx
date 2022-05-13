@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GameStyles } from "./game.style";
 import { MaterialCommunityIcons as Icon } from "react-native-vector-icons";
 import { TeamContext } from "../../../context/team.context";
+import { TimerContext } from "../../../context/timer.context";
 
 
 const Item = ({ title }:any) => (
@@ -18,9 +19,6 @@ export function GameComponent({ navigation }:any) {
   const [text, onChangeText] = useState<string>('');
   
   const {team, setTeam} = useContext(TeamContext);
-
-    
-  useEffect(() => console.log('useEffect' , team), [team]);
 
     const renderItem = ({ item }:any) => {
       return (
@@ -41,7 +39,7 @@ export function GameComponent({ navigation }:any) {
           }          
         }
         setTeam([...team, { id: Math.random().toString(), name: text, score: 0}]);
-        console.log('addEquipe', team);
+        // console.log('addEquipe', team);
         onChangeText("");
       }
       else {

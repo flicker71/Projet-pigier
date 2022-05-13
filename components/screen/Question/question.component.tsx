@@ -9,7 +9,7 @@ export function QuestionComponent({ route, navigation }:any) {
   
   const { page } = route.params;
 
-  console.log('typeQuestion', page)
+  // console.log('typeQuestion', page)
 
   const answerNavigate = (page: string) => {
     return navigation.navigate('Answer', {

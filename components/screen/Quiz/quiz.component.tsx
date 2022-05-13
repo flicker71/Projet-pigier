@@ -49,7 +49,7 @@ export function QuizComponent({ navigation }:any) {
   const {team, setTeam} = useContext(TeamContext);
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        {/* <ScoreBoardModal></ScoreBoardModal> */}
+        <ScoreBoardModal></ScoreBoardModal>
         <Text> {getTime()}</Text>
       <FlatList
         data={team}
